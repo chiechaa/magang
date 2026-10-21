@@ -4,70 +4,395 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Hotspot</title>
+    <!-- Font elegan. Jika user belum punya internet, tambahkan fonts.googleapis.com dan fonts.gstatic.com ke walled garden MikroTik. Tanpa itu, font cadangan dipakai. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500;1,700&family=Great+Vibes&family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --white: #ffffff;
+            --ivory: #fffafb;
+            --blush: #fde8ee;
+            --blush-deep: #f7c7d5;
+            --pink: #e5487f;
+            --pink-mid: #ee6c9a;
+            --pink-btn: #c8336c;
+            --pink-dark: #a02456;
+            --rose-deep: #d63f78;
+            --gold: #c8a45c;
+            --gold-light: #e8d29a;
+            --gold-soft: #f6e8c4;
+            --ink: #2a1a21;
+            --text: #4a3640;
+            --wine: #8a1c3d;
+            --green: #3f7a5a;
+
+            --font-display: 'Cormorant Garamond', 'Didot', 'Bodoni MT', 'Playfair Display', Georgia, 'Times New Roman', serif;
+            --font-script: 'Great Vibes', 'Snell Roundhand', 'Segoe Script', 'Brush Script MT', cursive;
+            --font-body: 'Jost', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            /* Dua lapis sayap: bulu belakang lebih panjang dan transparan, bulu depan lebih rapat */
+            --wings: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 160'><g fill='white' fill-opacity='0.5'><ellipse cx='-140' rx='140' ry='12' transform='translate(310 140) rotate(3)'/><ellipse cx='-128' rx='128' ry='12' transform='translate(310 140) rotate(14)'/><ellipse cx='-114' rx='114' ry='12' transform='translate(310 140) rotate(25)'/><ellipse cx='-98' rx='98' ry='11' transform='translate(310 140) rotate(36)'/><ellipse cx='-80' rx='80' ry='11' transform='translate(310 140) rotate(47)'/><ellipse cx='-60' rx='60' ry='10' transform='translate(310 140) rotate(58)'/><ellipse cx='140' rx='140' ry='12' transform='translate(330 140) rotate(-3)'/><ellipse cx='128' rx='128' ry='12' transform='translate(330 140) rotate(-14)'/><ellipse cx='114' rx='114' ry='12' transform='translate(330 140) rotate(-25)'/><ellipse cx='98' rx='98' ry='11' transform='translate(330 140) rotate(-36)'/><ellipse cx='80' rx='80' ry='11' transform='translate(330 140) rotate(-47)'/><ellipse cx='60' rx='60' ry='10' transform='translate(330 140) rotate(-58)'/></g><g fill='white'><ellipse cx='-112' rx='112' ry='10' transform='translate(310 140) rotate(8)'/><ellipse cx='-100' rx='100' ry='10' transform='translate(310 140) rotate(20)'/><ellipse cx='-88' rx='88' ry='9' transform='translate(310 140) rotate(32)'/><ellipse cx='-74' rx='74' ry='9' transform='translate(310 140) rotate(44)'/><ellipse cx='-58' rx='58' ry='8' transform='translate(310 140) rotate(56)'/><ellipse cx='112' rx='112' ry='10' transform='translate(330 140) rotate(-8)'/><ellipse cx='100' rx='100' ry='10' transform='translate(330 140) rotate(-20)'/><ellipse cx='88' rx='88' ry='9' transform='translate(330 140) rotate(-32)'/><ellipse cx='74' rx='74' ry='9' transform='translate(330 140) rotate(-44)'/><ellipse cx='58' rx='58' ry='8' transform='translate(330 140) rotate(-56)'/></g></svg>");
+
+            --lace: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><g fill='none' stroke='%23ffffff' stroke-opacity='0.26' stroke-width='1'><path d='M32 6 L58 32 L32 58 L6 32 Z'/><path d='M32 16 L48 32 L32 48 L16 32 Z'/><circle cx='32' cy='32' r='4'/><circle cx='0' cy='0' r='7'/><circle cx='64' cy='0' r='7'/><circle cx='0' cy='64' r='7'/><circle cx='64' cy='64' r='7'/></g></svg>");
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--font-body);
+            color: var(--text);
+            background:
+                var(--lace),
+                radial-gradient(circle at 12% 18%, rgba(255, 255, 255, 0.35) 0, transparent 90px),
+                radial-gradient(circle at 88% 30%, rgba(255, 255, 255, 0.28) 0, transparent 130px),
+                radial-gradient(circle at 78% 82%, rgba(255, 255, 255, 0.4) 0, transparent 110px),
+                radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.6) 0%, transparent 55%),
+                linear-gradient(180deg, #e9689a 0%, #f4a6c3 46%, #fde1ea 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 130px 20px 44px;
         }
+
+        :focus-visible {
+            outline: 3px solid var(--pink-dark);
+            outline-offset: 3px;
+        }
+
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 40px;
-            max-width: 450px;
+            position: relative;
+            background: var(--white);
+            padding: 46px 42px 42px;
+            max-width: 460px;
             width: 100%;
+            border: 1px solid var(--gold);
+            box-shadow:
+                inset 0 0 0 7px var(--white),
+                inset 0 0 0 8px var(--gold),
+                inset 0 0 0 11px var(--white),
+                inset 0 0 0 12px var(--blush-deep),
+                0 34px 70px rgba(120, 20, 60, 0.4);
+            animation: rise 0.8s ease-out both;
         }
+
+        /* Sayap terbuka sekali saat halaman dimuat */
+        .container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: -118px;
+            width: 540px;
+            max-width: 124%;
+            height: 135px;
+            transform: translateX(-50%);
+            background: var(--wings) center bottom / contain no-repeat;
+            filter:
+                drop-shadow(0 0 14px rgba(255, 255, 255, 0.65))
+                drop-shadow(0 8px 12px rgba(120, 20, 60, 0.28));
+            pointer-events: none;
+            animation: unfurl 1.2s cubic-bezier(0.2, 0.8, 0.25, 1) 0.15s both;
+        }
+
+        @keyframes unfurl {
+            from { opacity: 0; transform: translateX(-50%) translateY(16px) scale(0.7); }
+            to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Tepi renda bergelombang */
+        .container::after {
+            content: '';
+            position: absolute;
+            left: -1px;
+            right: -1px;
+            bottom: -11px;
+            height: 10px;
+            background: radial-gradient(circle at 10px 0, var(--pink) 0 9px, transparent 9.5px) 0 0 / 20px 10px repeat-x;
+        }
+
         .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { color: #333; font-size: 28px; margin-bottom: 10px; }
-        .header p { color: #666; font-size: 14px; }
+
         .wifi-icon {
-            width: 80px; height: 80px; margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 40px;
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 18px;
+            background: radial-gradient(circle at 32% 28%, #f7a3c2 0%, var(--rose-deep) 62%, var(--pink-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 38px;
+            box-shadow:
+                0 0 0 4px var(--white),
+                0 0 0 5px var(--gold),
+                0 0 0 9px var(--white),
+                0 0 0 10px var(--blush-deep),
+                0 14px 26px rgba(200, 51, 108, 0.4);
         }
+
+        .header h1 {
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 700;
+            font-size: 44px;
+            line-height: 1.05;
+            margin: 26px 0 4px;
+            color: var(--pink-dark);
+            background: linear-gradient(95deg, var(--pink-dark) 10%, var(--rose-deep) 50%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-family: var(--font-script);
+            color: var(--pink-dark);
+            font-size: 30px;
+            line-height: 1.2;
+        }
+
+        /* Ornamen pemisah emas */
+        .header::after {
+            content: '';
+            display: block;
+            width: 170px;
+            height: 10px;
+            margin: 16px auto 0;
+            background:
+                radial-gradient(circle at center, var(--gold) 0 3px, transparent 3.5px) center / 10px 10px no-repeat,
+                linear-gradient(var(--gold), var(--gold)) left center / 72px 1px no-repeat,
+                linear-gradient(var(--gold), var(--gold)) right center / 72px 1px no-repeat;
+        }
+
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #333; font-weight: 600; font-size: 14px; }
-        .form-group input {
-            width: 100%; padding: 12px 15px; border: 2px solid #e1e1e1;
-            border-radius: 10px; font-size: 14px; transition: border-color 0.3s;
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            color: var(--ink);
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: 0.6px;
         }
-        .form-group input:focus { outline: none; border-color: #667eea; }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 15px;
+            background: var(--ivory);
+            color: var(--ink);
+            border: 1px solid var(--blush-deep);
+            border-bottom: 2px solid var(--pink-mid);
+            border-radius: 0;
+            font-family: var(--font-body);
+            font-size: 15px;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+        .form-group input::placeholder { color: #94818a; }
+
+        .form-group input:focus {
+            outline: none;
+            background: var(--white);
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(229, 72, 127, 0.16);
+        }
+
         .btn {
-            width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(180deg, var(--pink-mid) 0%, var(--pink-btn) 100%);
+            color: #fff;
+            border: 1px solid var(--gold);
+            border-radius: 0;
+            font-family: var(--font-display);
+            font-style: italic;
+            font-weight: 700;
+            font-size: 25px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(200, 51, 108, 0.3), inset 0 0 0 3px rgba(255, 255, 255, 0.16);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4); }
-        .btn:active { transform: translateY(0); }
-        .btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-        .message { padding: 15px; border-radius: 10px; margin-top: 20px; display: none; }
-        .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .message.info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-        .register-link { text-align: center; margin-top: 20px; color: #666; }
-        .register-link a { color: #667eea; text-decoration: none; font-weight: 600; }
-        .register-link a:hover { text-decoration: underline; }
-        .loading {
-            display: inline-block; width: 20px; height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3); border-radius: 50%; border-top-color: white;
-            animation: spin 1s ease-in-out infinite; margin-right: 10px; vertical-align: middle;
+
+        /* Kilau yang lewat saat tombol di-hover */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: -60%;
+            width: 40%;
+            background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transform: skewX(-20deg);
+            transition: left 0.7s ease;
         }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px rgba(200, 51, 108, 0.4), inset 0 0 0 3px rgba(255, 255, 255, 0.16);
+        }
+
+        .btn:hover:not(:disabled)::after { left: 130%; }
+
+        .btn:active:not(:disabled) { transform: translateY(0); }
+
+        .btn:disabled {
+            background: #b98aa0;
+            border-color: #d9c4cc;
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            padding: 14px 16px;
+            margin-top: 20px;
+            display: none;
+            font-weight: 500;
+            border: 1px solid;
+            border-left-width: 5px;
+        }
+
+        .message.success { background: #e3f1e8; color: #21533a; border-color: var(--green); }
+        .message.error   { background: #fbdce5; color: var(--wine); border-color: var(--wine); }
+        .message.info    { background: var(--gold-soft); color: #5e4a12; border-color: var(--gold); }
+
+        .register-link {
+            text-align: center;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid var(--blush-deep);
+            color: var(--text);
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: var(--pink-dark);
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 1px solid var(--pink-mid);
+        }
+
+        .register-link a:hover { color: var(--pink); }
+
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
         @keyframes spin { to { transform: rotate(360deg); } }
-        .status-check { margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; display: none; }
+
+        .footer-link { text-align: center; margin-top: 20px; }
+
+        .link-btn {
+            background: none;
+            border: none;
+            color: var(--pink-dark);
+            cursor: pointer;
+            font-family: var(--font-script);
+            font-size: 27px;
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 4px;
+        }
+
+        .link-btn:hover { color: var(--pink); }
+
+        .status-check {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--blush);
+            border: 1px dashed var(--gold);
+            display: none;
+        }
+
         .status-check.show { display: block; }
-        .status-check input { width: 70%; padding: 10px; border: 2px solid #e1e1e1; border-radius: 8px; margin-right: 10px; }
-        .status-check button { padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .status-result { margin-top: 10px; padding: 10px; border-radius: 8px; font-size: 14px; display: none; }
-        .status-result.approved { background: #d4edda; color: #155724; }
-        .status-result.pending { background: #fff3cd; color: #856404; }
-        .status-result.rejected { background: #f8d7da; color: #721c24; }
-        .status-result.not-found { background: #e2e3e5; color: #383d41; }
+
+        .status-check .status-label {
+            margin-bottom: 10px;
+            color: var(--ink);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .status-check .status-row { display: flex; }
+
+        .status-check input {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 12px;
+            background: var(--white);
+            border: 1px solid var(--blush-deep);
+            border-radius: 0;
+            margin-right: 10px;
+            font-family: var(--font-body);
+            font-size: 14px;
+        }
+
+        .status-check input:focus {
+            outline: none;
+            border-color: var(--pink);
+            box-shadow: 0 0 0 3px rgba(229, 72, 127, 0.16);
+        }
+
+        .status-check button {
+            padding: 10px 20px;
+            background: var(--pink-btn);
+            color: #fff;
+            border: 1px solid var(--gold);
+            border-radius: 0;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: background 0.15s;
+        }
+
+        .status-check button:hover { background: var(--pink-dark); }
+
+        .status-result {
+            margin-top: 12px;
+            padding: 10px 12px;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 4px solid;
+            display: none;
+        }
+
+        .status-result.approved  { background: #e3f1e8; color: #21533a; border-color: var(--green); }
+        .status-result.pending   { background: var(--gold-soft); color: #5e4a12; border-color: var(--gold); }
+        .status-result.rejected  { background: #fbdce5; color: var(--wine); border-color: var(--wine); }
+        .status-result.not-found { background: #ece4e7; color: #4b3f45; border-color: #9c8c93; }
+
+        @media (max-width: 480px) {
+            body { padding: 100px 14px 34px; }
+            .container { padding: 38px 26px 34px; }
+            .container::before { top: -92px; height: 108px; }
+            .header h1 { font-size: 36px; }
+            .header p { font-size: 26px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .container, .container::before { animation: none; }
+            .loading { animation-duration: 3s; }
+            .btn, .btn::after { transition: none; }
+        }
     </style>
 </head>
 <body>
@@ -101,8 +426,8 @@
         <div class="message" id="message"></div>
 
         <div class="status-check" id="statusCheck">
-            <p style="margin-bottom: 10px; color: #666; font-size: 14px;">Cek status registrasi:</p>
-            <div style="display: flex;">
+            <p class="status-label">Cek status registrasi:</p>
+            <div class="status-row">
                 <input type="text" id="checkUsername" placeholder="Username">
                 <button type="button" onclick="checkStatus()">Cek</button>
             </div>
@@ -113,8 +438,8 @@
             Belum punya akun? <a href="register.html">Daftar di sini</a>
         </div>
 
-        <div style="text-align: center; margin-top: 30px;">
-            <button type="button" onclick="toggleStatusCheck()" style="background: none; border: none; color: #667eea; cursor: pointer; font-size: 14px; text-decoration: underline;">
+        <div class="footer-link">
+            <button type="button" class="link-btn" onclick="toggleStatusCheck()">
                 Cek status registrasi
             </button>
         </div>
